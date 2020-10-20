@@ -202,6 +202,8 @@ class WebServer {
           query_pairs = splitQuery(request.replace("multiply?", ""));
 
           try {
+
+              if (query_pairs.get("num1") == null || query_pairs.get("num2") == null) throw new NullPointerException("missing param");
               // extract required fields from parameters
               Integer num1 = Integer.parseInt(query_pairs.get("num1"));
               Integer num2 = Integer.parseInt(query_pairs.get("num2"));
