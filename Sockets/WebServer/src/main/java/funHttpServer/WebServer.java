@@ -241,7 +241,6 @@ class WebServer {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
 
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response
@@ -257,7 +256,7 @@ class WebServer {
             JSONObject item = result.getJSONObject(i);
             JSONObject owner = item.getJSONObject("owner");
             builder.append(owner.getString("login") + ", " + item.getInt("id") + " -> " + item.getString("name"));
-            builder.append("\n");
+            builder.append("<br />");
           }
 
 
