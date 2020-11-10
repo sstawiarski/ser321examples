@@ -35,19 +35,24 @@ class SockServerState {
 		while (serv.isBound() && !serv.isClosed()) {
 			System.out.println("SockServerState Ready...");
 			try {
+				// always waiting for a connection
 				sock = serv.accept();
 				in = sock.getInputStream();
 				out = sock.getOutputStream();
 
+				// reading in if the user chose 't' or 'r'
 				char c = (char)in.read();
 				System.out.print("Server received " + c);
 				Thread.sleep(sleepDelay);
 				switch (c) {
+					// r will reset the currents clients info 
 				case 'r': 
 					clientId = in.read();
 					totals.put(clientId, 0);
 					out.write(0);
 					break;
+					// t will read in the client id and then check which the client gave and when the client does not exist in hashmap
+					//  new client will be added, then the read value x the client sent will be added to the clients total
 				case 't': 
 					clientId = in.read();
 					int x = in.read();
@@ -59,14 +64,16 @@ class SockServerState {
 					totals.put(clientId, total + x);
 					out.write(totals.get(clientId));
 					break;
+					// we assume we get a client id and a value and we are just pringing it and adding it up, the state of the server is not changed
 				default:
 					int x2 = in.read();
 					int y = in.read();
-					System.out.print(" " + x2 + " " + y);
+					System.out.println("Default Case, so no t or r:" + x2 + " " + y);
 					out.write(x2 + y);
 				}
 				System.out.println("");
 				out.flush();
+				// done loop back waiting for new connection
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
